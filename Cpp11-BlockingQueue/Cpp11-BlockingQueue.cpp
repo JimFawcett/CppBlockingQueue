@@ -55,8 +55,8 @@ int main()
   t.join();
 
   std::cout << "\n";
-  std::cout << "\n  Making move copy of BlockingQueue";
-  std::cout << "\n -----------------------------------";
+  std::cout << "\n  Move construction of BlockingQueue";
+  std::cout << "\n ------------------------------------";
 
   std::string msg = "test";
   q.enQ(msg);

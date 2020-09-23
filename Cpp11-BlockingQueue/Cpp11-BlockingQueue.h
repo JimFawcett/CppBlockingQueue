@@ -56,7 +56,7 @@ public:
   BlockingQueue(const BlockingQueue<T>&) = delete;
   BlockingQueue<T>& operator=(const BlockingQueue<T>&) = delete;
   T deQ();
-  void enQ(const T& t);
+  void enQ(T t);
   T& front();
   void clear();
   size_t size();
@@ -122,7 +122,7 @@ T BlockingQueue<T>::deQ()
 //----< push element onto back of queue >------------------------------
 
 template<typename T>
-void BlockingQueue<T>::enQ(const T& t)
+void BlockingQueue<T>::enQ(T t)
 {
   {
     std::unique_lock<std::mutex> l(mtx_);
