@@ -31,11 +31,37 @@ void test(BlockingQueue<std::string>* pQ)
   } while(msg != "quit");
 }
 
+class Msg {
+public:
+  Msg(const std::string& cnts = "") : contents(cnts) {
+
+  }
+  Msg(const Msg& msg) : contents(msg.contents) {
+    std::cout << "\n  copied Msg";
+  }
+  Msg(Msg&& msg) : contents(std::move(msg.contents)) {
+    std::cout << "\n  moved Msg";
+  }
+  std::string& msg_contents() { return contents; }
+private:
+  std::string contents;
+};
+
 int main()
 {
   std::cout << "\n  Demonstrating C++11 Blocking Queue";
-  std::cout << "\n ====================================";
+  std::cout << "\n ====================================\n";
 
+  std::cout << "\n  -- test enQ and deQ operations --";
+
+  BlockingQueue<Msg> mQ;
+  Msg tmsg("a message");
+  std::cout << "\n  enqueuing " << "\"" << tmsg.msg_contents() << "\"";
+  mQ.enQ(tmsg);
+  auto dm = mQ.deQ();
+  std::cout << "\n  dequeued " << "\"" << dm.msg_contents() << "\"\n";
+
+  std::cout << "\n  -- test inter-thread messaging --";
   BlockingQueue<std::string> q;
   std::thread t(test, &q);
 
