@@ -2,7 +2,7 @@
 #define CPP11_BLOCKINGQUEUE_H
 ///////////////////////////////////////////////////////////////
 // Cpp11-BlockingQueue.h - Thread-safe Blocking Queue        //
-// ver 1.3                                                   //
+// ver 1.4                                                   //
 // Jim Fawcett, CSE687 - Object Oriented Design, Spring 2015 //
 ///////////////////////////////////////////////////////////////
 /*
@@ -51,8 +51,8 @@ template <typename T>
 class BlockingQueue {
 public:
   BlockingQueue() {}
-  BlockingQueue(BlockingQueue<T>&& bq);
-  BlockingQueue<T>& operator=(BlockingQueue<T>&& bq);
+  BlockingQueue(BlockingQueue<T>&& bq) noexcept;
+  BlockingQueue<T>& operator=(BlockingQueue<T>&& bq) noexcept;
   BlockingQueue(const BlockingQueue<T>&) = delete;
   BlockingQueue<T>& operator=(const BlockingQueue<T>&) = delete;
   T deQ();
@@ -68,7 +68,8 @@ private:
 //----< move constructor >---------------------------------------------
 
 template<typename T>
-BlockingQueue<T>::BlockingQueue(BlockingQueue<T>&& bq) // need to lock so can't initialize
+BlockingQueue<T>::BlockingQueue(BlockingQueue<T>&& bq) noexcept
+// need to lock so can't initialize
 {
   std::lock_guard<std::mutex> l(mtx_);
   q_ = bq.q_;
@@ -79,7 +80,7 @@ BlockingQueue<T>::BlockingQueue(BlockingQueue<T>&& bq) // need to lock so can't 
 //----< move assignment >----------------------------------------------
 
 template<typename T>
-BlockingQueue<T>& BlockingQueue<T>::operator=(BlockingQueue<T>&& bq)
+BlockingQueue<T>& BlockingQueue<T>::operator=(BlockingQueue<T>&& bq) noexcept
 {
   if (this == &bq) return *this;
   std::lock_guard<std::mutex> l(mtx_);

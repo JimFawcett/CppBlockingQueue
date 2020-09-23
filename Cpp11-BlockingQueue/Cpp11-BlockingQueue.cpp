@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////
 // Cpp11-BlockingQueue.cpp - Thread-safe Blocking Queue      //
-// ver 1.3                                                   //
+// ver 1.4                                                   //
 // Jim Fawcett, CSE687 - Object Oriented Design, Spring 2013 //
 ///////////////////////////////////////////////////////////////
 
