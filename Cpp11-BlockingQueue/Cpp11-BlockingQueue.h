@@ -2,7 +2,7 @@
 #define CPP11_BLOCKINGQUEUE_H
 ///////////////////////////////////////////////////////////////
 // Cpp11-BlockingQueue.h - Thread-safe Blocking Queue        //
-// ver 1.4 - 23 Sep 2020                                     //
+// ver 1.5 - 25 Sep 2020                                     //
 // Jim Fawcett, CSE687 - Object Oriented Design, Spring 2015 //
 ///////////////////////////////////////////////////////////////
 /*
@@ -38,6 +38,10 @@
  *
  * Maintenance History:
  * --------------------
+ * ver 1.5 : 25 Sep 2020
+ * - fixed omission of move in wait loop
+ * ver 1.4 : 23 Sep 2020
+ * - change enQ(T t) to pass argument T by value
  * ver 1.3 : 04 Mar 2016
  * - changed behavior of front() to throw exception
  *   on empty queue.
@@ -130,7 +134,7 @@ T BlockingQueue<T>::deQ()
 
   while (q_.size() == 0)
     cv_.wait(l, [this] () { return q_.size() > 0; });
-  T temp = q_.front();
+  T temp = std::move(q_.front());
   q_.pop();
   return temp;
 }
@@ -153,7 +157,7 @@ T& BlockingQueue<T>::front()
   std::lock_guard<std::mutex> l(mtx_);
   if(q_.size() > 0)
     return q_.front();
-  throw std::exception("attempt to deQue empty queue");
+  throw std::exception("attempt to access empty queue");
 }
 //----< remove all elements from queue >-------------------------------
 
